@@ -1,27 +1,30 @@
 # User Authentication API
 
-This API handles user registration and login using Node.js, Express, MongoDB, JWT, and bcrypt.
+This API handles user registration, login, profile access, and logout using **Node.js**, **Express**, **MongoDB**, **JWT**, and **bcrypt**.
 
 ---
 
-## POST `/user/register`
+## Technologies Used
 
-Registers a new user by storing their details (name, email, and password) in the database.
-
-### Description
-
-This endpoint creates a new user by:
-
-- Validating the incoming request.
-- Hashing the password using `bcrypt`.
-- Saving the user to MongoDB.
-- Returning a signed JWT token and user data.
+- **Express.js**
+- **MongoDB**
+- **Mongoose**
+- **JWT**
+- **bcrypt**
+- **Express Validator**
+- **Postman** (for testing)
 
 ---
 
-### Request Body
+## API Endpoints
 
-Send a JSON object with the following structure:
+### Register User
+
+**POST** `/users/register`
+
+Registers a new user by storing their name, email, and password in the database.
+
+#### Request Body
 
 ```json
 {
@@ -34,17 +37,13 @@ Send a JSON object with the following structure:
 }
 ```
 
----
-
-### Example Response
-
-#### Success (201 Created)
+#### Success Response (201 Created)
 
 ```json
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "token": "<jwt_token>",
   "user": {
-    "_id": "60c72b2f9b1e8b001c8e4b8a",
+    "_id": "user_id",
     "fullname": {
       "firstname": "John",
       "lastname": "Doe"
@@ -55,7 +54,7 @@ Send a JSON object with the following structure:
 }
 ```
 
-#### Validation Error (400 Bad Request)
+#### Validation Error (400)
 
 ```json
 {
@@ -65,29 +64,19 @@ Send a JSON object with the following structure:
       "param": "fullname.firstname",
       "location": "body"
     }
-    // ...other errors
   ]
 }
 ```
 
-## POST `/user/login`
-
-Authenticates an existing user and returns a JWT token.
-
-### Description
-
-This endpoint:
-
-- Validates the email and password.
-- Verifies the user's credentials using `bcrypt`.
-- Returns a JWT token on successful login.
-
-
 ---
 
-### Request Body
+### Login User
 
-Send a JSON object with the following structure:
+**POST** `/users/login`
+
+Authenticates a user using email and password and returns a JWT token.
+
+#### Request Body
 
 ```json
 {
@@ -96,17 +85,13 @@ Send a JSON object with the following structure:
 }
 ```
 
----
-
-### Example Response
-
-#### Success (200 OK)
+#### Success Response (200 OK)
 
 ```json
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "token": "<jwt_token>",
   "user": {
-    "_id": "60c72b2f9b1e8b001c8e4b8a",
+    "_id": "user_id",
     "fullname": {
       "firstname": "John",
       "lastname": "Doe"
@@ -117,7 +102,7 @@ Send a JSON object with the following structure:
 }
 ```
 
-#### Error Response (401 Unauthorized)
+#### Unauthorized (401)
 
 ```json
 {
@@ -125,7 +110,7 @@ Send a JSON object with the following structure:
 }
 ```
 
-#### Validation Error (400 Bad Request)
+#### Validation Error (400)
 
 ```json
 {
@@ -138,3 +123,102 @@ Send a JSON object with the following structure:
   ]
 }
 ```
+
+---
+
+### Get User Profile
+
+**GET** `/users/profile`
+
+Returns the authenticated user's profile.
+
+#### Authorization Required
+
+Send token via:
+
+- **Cookie**: `token=<jwt>`
+- **Header**: `Authorization: Bearer <jwt>`
+
+#### Success Response (200 OK)
+
+```json
+{
+  "_id": "user_id",
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john.doe@example.com",
+  "socketId": null
+}
+```
+
+#### Unauthorized (401)
+
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+---
+
+### Logout User
+
+**GET** `/users/logout`
+
+Logs out the user by clearing their auth cookie and blacklisting the JWT.
+
+#### Authorization Required
+
+Same as `/users/profile`.
+
+#### Success Response (200 OK)
+
+```json
+{
+  "message": "Logged out"
+}
+```
+
+#### Unauthorized (401)
+
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+---
+
+## Setup & Run
+
+1. Clone the repo:
+
+   ```bash
+   git clone https://github.com/yanshiii/uber-clone.git
+   cd your-repo-name
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Add `.env` file:
+
+   ```env
+   PORT=4000
+   MONGO_URI=mongodb://localhost:27017/your-db-name
+   JWT_SECRET=your_jwt_secret
+   ```
+
+4. Run server:
+
+   ```bash
+   npm run dev
+   ```
+
+---
+
