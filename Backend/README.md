@@ -191,6 +191,75 @@ Same as `/users/profile`.
 
 ---
 
+# 🚖 Captain Authentication API
+
+## API Endpoints
+
+### Register Captain
+
+**POST** `/captains/register`
+
+Registers a new captain with personal and vehicle details.
+
+#### Request Body
+
+```json
+{
+  "fullname": {
+    "firstname": "Raj",
+    "lastname": "Singh"
+  },
+  "email": "raj.singh@example.com",
+  "password": "strongPassword123",
+  "vehicle": {
+    "color": "Red",
+    "plate": "DL 04 XY 6021",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
+
+#### Success Response 
+
+```json
+{
+  "message": "Captain registered successfully",
+  "token": "<jwt_token>",
+  "captain": {
+    "_id": "captain_id",
+    "fullname": {
+      "firstname": "Raj",
+      "lastname": "Singh"
+    },
+    "email": "raj.singh@example.com",
+    "vehicle": {
+      "color": "Red",
+      "plate": "DL04XY6021",
+      "capacity": 4,
+      "vehicleType": "car"
+    },
+    "status": "inactive"
+  }
+}
+```
+
+#### Validation Error (400)
+
+```json
+{
+  "errors": [
+    {
+      "msg": "Please enter a valid vehicle plate number",
+      "param": "vehicle.plate",
+      "location": "body"
+    }
+  ]
+}
+```
+
+---
+
 ## Setup & Run
 
 1. Clone the repo:
