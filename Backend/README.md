@@ -260,6 +260,151 @@ Registers a new captain with personal and vehicle details.
 
 ---
 
+### Login Captain
+
+**POST** `/captains/login`
+
+Authenticates a captain using email and password and returns a JWT token.
+
+#### Request Body
+
+```json
+{
+  "email": "raj.singh@example.com",     // must be a valid email
+  "password": "strongPassword123"       // must be at least 6 characters
+}
+```
+
+#### Success Response (200 OK)
+
+```json
+{
+  "message": "Captain logged in successfully",
+  "token": "<jwt_token>",
+  "captain": {
+    "_id": "captain_id",
+    "fullname": {
+      "firstname": "Raj",
+      "lastname": "Singh"
+    },
+    "email": "raj.singh@example.com",
+    "vehicle": {
+      "color": "Red",
+      "plate": "DL04XY6021",
+      "capacity": 4,
+      "vehicleType": "car"
+    },
+    "status": "inactive"
+  }
+}
+```
+
+#### Unauthorized (401)
+
+```json
+{
+  "message": "Invalid email or password"
+}
+```
+#### Validation Error (400)
+
+```json
+{
+  "errors": [
+    {
+      "msg": "Please enter a valid email address",
+      "param": "email",
+      "location": "body"
+    },
+    {
+      "msg": "Password is required",
+      "param": "password",
+      "location": "body"
+    }
+  ]
+}
+```
+
+---
+
+### Get Captain Profile
+
+**POST** `/captains/profile`
+
+Returns the authenticated captain's profile.
+
+#### Authorization Required
+
+Send token via:
+- Cookie: 
+``` token=<jwt> ```
+- Header: 
+``` Authorization: Bearer <jwt> ```
+
+
+#### Success Response (200 OK)
+
+```json
+{
+  "_id": "captain_id",
+  "fullname": {
+    "firstname": "Raj",
+    "lastname": "Singh"
+  },
+  "email": "raj.singh@example.com",
+  "vehicle": {
+    "color": "Red",
+    "plate": "DL04XY6021",
+    "capacity": 4,
+    "vehicleType": "car"
+  },
+  "status": "inactive"
+}
+```
+
+#### Unauthorized (401)
+
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+---
+
+### Logout Captain
+
+**POST** `/captains/logout`
+
+Logs out the captain by blacklisting the JWT and clearing the auth cookie.
+
+#### Authorization Required
+
+Send token via:
+- Cookie: 
+``` token=<jwt> ```
+- Header: 
+``` Authorization: Bearer <jwt> ```
+
+
+#### Success Response (200 OK)
+
+```json
+{
+  "message": "Captain logged out successfully"
+}
+```
+
+#### Unauthorized (401)
+
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+---
+
 ## Setup & Run
 
 1. Clone the repo:
