@@ -42,8 +42,11 @@ userSchema.methods.comparePassword = async function(candidatePassword) {
 }
 
 userSchema.statics.hashPassword = async function(password) {
-    return await bcrypt.hash(password, 10);
-}
+  if (!password) throw new Error('Password is required for hashing');
+  const saltRounds = 10;
+  return await bcrypt.hash(password, saltRounds);
+};
+
 
 const userModel = mongoose.model('user', userSchema);
 

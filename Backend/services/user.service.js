@@ -1,7 +1,6 @@
 // Interacts with the database to manage user data
 const userModel = require('../models/user.model'); 
 
-
 module.exports.createUser = async ({
     firstname,lastname, email, password
 }) => {
