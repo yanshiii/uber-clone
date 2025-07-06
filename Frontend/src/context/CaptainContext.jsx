@@ -1,31 +1,51 @@
-import { createContext, useState, useContext } from 'react';
+import { createContext, useState, useEffect } from 'react';
 
 export const CaptainDataContext = createContext();
 
 const CaptainContext = ({ children }) => {
-    const [ captain, setCaptain ] = useState(null);
-    const [ isLoading, setIsLoading ] = useState(false);
-    const [ error, setError ] = useState(null);
+  const [captain, setCaptain] = useState(undefined);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [isReady, setIsReady] = useState(false);
 
-    const updateCaptain = (captainData) => {
-        setCaptain(captainData);
-    };
+  useEffect(() => {
+    const storedCaptain = localStorage.getItem('captain');
 
-    const value = {
+    if (storedCaptain) {
+      const parsed = JSON.parse(storedCaptain);
+      setCaptain(parsed);
+    }
+
+    setIsReady(true);
+  }, []);
+
+  const updateCaptain = (captainData) => {
+    setCaptain(captainData);
+    localStorage.setItem('captain', JSON.stringify(captainData));
+  };
+
+  const logoutCaptain = () => {
+    setCaptain(undefined);
+    localStorage.removeItem('captain');
+  };
+
+  return (
+    <CaptainDataContext.Provider
+      value={{
         captain,
         setCaptain,
         isLoading,
         setIsLoading,
         error,
         setError,
-        updateCaptain
-    };
-
-    return (
-        <CaptainDataContext.Provider value={value}>
-            {children}
-        </CaptainDataContext.Provider>
-    );
+        updateCaptain,
+        logoutCaptain,
+        isReady
+      }}
+    >
+      {children}
+    </CaptainDataContext.Provider>
+  );
 };
 
 export default CaptainContext;
