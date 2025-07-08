@@ -12,7 +12,10 @@
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
+    "@react-google-maps/api": "^2.20.7",
     "axios": "^1.10.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.0.1",
     "gsap": "^3.13.0",
     "lodash": "^4.17.21",
     "react": "^19.1.0",

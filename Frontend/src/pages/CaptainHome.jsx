@@ -70,7 +70,7 @@ const CaptainHome = () => {
 
   })
   async function confirmRide() {
-
+  try {
     const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/confirm`, {
       rideId: ride._id,
       captainId: captain._id,
@@ -78,12 +78,16 @@ const CaptainHome = () => {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
-    })
+    });
 
-    setRidePopUpPanel(false)
-    setConfirmRidePopupPanel(true)
-
+    setRidePopUpPanel(false);
+    setConfirmRidePopUpPanel(true);
+  } catch (error) {
+    console.error('Ride confirmation failed:', error);
+    // Optionally show user feedback or retry logic
   }
+}
+
 
 
   useGSAP(() => {
