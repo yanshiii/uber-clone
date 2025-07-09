@@ -12,7 +12,6 @@ const mapsRoutes = require('./routes/maps.routes')
 const rideRoutes = require('./routes/ride.routes')
 
 connectToDb();
-const __dirname = path.resolve();
 
 app.use(express.static(frontendPath));
 
@@ -32,13 +31,5 @@ app.use('/users', userRoutes);
 app.use('/captains', captainRoutes); 
 app.use('/maps', mapsRoutes)
 app.use('/rides', rideRoutes)
-
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
-
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
-  });
-}
 
 module.exports = app;
