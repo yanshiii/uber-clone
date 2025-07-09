@@ -13,8 +13,7 @@ const rideRoutes = require('./routes/ride.routes')
 
 connectToDb();
 
-app.use(express.static(frontendPath));
-
+// app.use(express.static(frontendPath));
 
 app.use(cors());
 app.use(express.json());
