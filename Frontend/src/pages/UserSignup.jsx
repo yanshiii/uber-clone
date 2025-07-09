@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import uberLogo from '../images/Uber-Logo.png';
-import { set } from 'mongoose';
 import axios from 'axios';
 import { UserDataContext } from '../context/UserContext';
 
